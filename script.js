@@ -79,3 +79,9 @@ document.addEventListener("DOMContentLoaded", () => {
   window.addEventListener("scroll", checkScroll)
 })
 
+//toggle navbar
+
+    function toggleMenu() {
+      const nav = document.getElementById("navLinks");
+      nav.classList.toggle("active");
+    }
