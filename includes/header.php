@@ -1,0 +1,22 @@
+  <header class="navbar">
+    <div class="container">
+      <div class="top-bar">
+        <button class="menu-toggle" onclick="toggleMenu()">☰</button>
+        <h1 class="logo">Deal Bites</h1>
+      </div>
+      <div class="nav-links" id="navLinks">
+        <a href="#">Home</a>
+        <div class="dropdown">
+          <a href="#">Categories</a>
+          <div class="dropdown-content">
+            <a href="#">All Deals</a>
+            <a href="#">Discount Deals</a>
+            <a href="#">Ramadan Offers</a>
+          </div>
+        </div>
+      
+        <a href="#search">Search</a>
+        <a href="#contact">Contact</a>
+      </div>
+    </div>
+  </header>
