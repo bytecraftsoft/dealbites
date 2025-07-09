@@ -26,10 +26,9 @@
     <!-- Custom Script -->
     <script src="assets/js/script.js"></script>
 
+    <!-- Swiper CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
 
-    <!-- Swiper JS -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
-    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 
 </head>
 
@@ -46,71 +45,46 @@
     </section>
     <!-- CATEGORY SECTION -->
     <section id="categories" style="background-color: #1a1a1a; padding: 5rem 1rem;">
-        <!-- <div style="text-align: center; margin-bottom: 3rem;">
+        <div style="text-align: center; margin-bottom: 3rem;">
             <h2 style="color: #f8f9f6; font-size: 2.7rem; font-weight: 600; letter-spacing: 1px;">Browse Deals
             </h2>
             <p style="color: #ccc; font-size: 1.1rem;">Quickly explore our best dining deals</p>
-        </div> -->
+        </div>
 
-        <section class="trending-section">
-            <h2>Trending Deals</h2>
+        <div class="deals-grid">
+    <?php
+include 'config/config.php';
 
-            <div id="deals-carousel" class="swiper-container">
-                <div class="swiper-wrapper">
-                    <?php
-                    include 'config/config.php';
-                    $sql = "SELECT * FROM deals ORDER BY created_at DESC";
-                    $result = $conn->query($sql);
-                    $counter = 0;
-                    $chunkSize = 12;
-                    $cards = array();
+$sql = "SELECT * FROM deals ORDER BY created_at DESC";
+$result = $conn->query($sql);
+?>
 
-                    while ($row = $result->fetch_assoc()) {
-                        $cards[] = $row;
-                    }
-
-                    $total = count($cards);
-                    $chunks = array_chunk($cards, $chunkSize);
-
-                    foreach ($chunks as $slide): ?>
-                        <div class="swiper-slide">
-                            <div class="deals-grid">
-                                <?php foreach ($slide as $row): ?>
-                                    <div class="deal-card">
-                                        <div class="deal-image"
-                                            style="background-image: url('<?php echo $row['image'] ?: 'images/default.jpg'; ?>');">
-                                        </div>
-                                        <div class="deal-content">
-                                            <div class="deal-title"><?php echo $row['title'] ?: 'Untitled Deal'; ?></div>
-                                            <div class="deal-meta">
-                                                <?php
-                                                echo $row['price'] > 0 ? "Rs. " . number_format($row['price']) : "Price N/A";
-                                                echo $row['city'] ? " | " . $row['city'] : "";
-                                                ?>
-                                            </div>
-                                            <?php if (!empty($row['tag'])): ?>
-                                                <div class="deal-tag"><?php echo $row['tag']; ?></div>
-                                            <?php endif; ?>
-                                        </div>
-                                    </div>
-                                <?php endforeach; ?>
-                            </div>
-                        </div>
-                    <?php endforeach; ?>
-                </div>
-                <!-- Swiper Pagination -->
-                <div class="swiper-button-prev"></div>
-                <div class="swiper-button-next"></div>
-                <div class="swiper-pagination"></div>
-
+<div class="deals-grid">
+<?php while ($row = $result->fetch_assoc()): ?>
+    <div class="deal-card">
+        <div class="deal-image" style="background-image: url('<?php echo $row['image'] ?: 'images/default.jpg'; ?>');"></div>
+        <div class="deal-content">
+            <div class="deal-title"><?php echo $row['title'] ?: 'Untitled Deal'; ?></div>
+            
+            <div class="deal-meta">
+                <?php
+                    echo $row['price'] > 0 ? "Rs. " . number_format($row['price']) : "Price N/A";
+                    echo $row['city'] ? " | " . $row['city'] : "";
+                ?>
             </div>
-        </section>
+            
+            <?php if (!empty($row['tag'])): ?>
+                <div class="deal-tag"><?php echo $row['tag']; ?></div>
+            <?php endif; ?>
+        </div>
+    </div>
+<?php endwhile; ?>
+</div>
+
+        </div>
 
         <!-- FILTER SECTION -->
-         
         <section class="filter-modern-section">
-<h2 class="section-heading" style="text-align: center;">Explore by Category</h2>
-
             <div class="filter-box">
 
                 <!-- Category Dropdown -->
@@ -162,48 +136,68 @@
             </div>
         </section>
 
-      <!-- EXPLORE BY CATEGORY SECTION -->
-<section class="category-card-section">
+        <!-- TRENDING DEALS SECTION -->
+        <section class="trending-section">
+            <h2>Trending Deals</h2>
 
-  <div class="category-card-grid">
-    <div class="category-card">
-      <div class="category-card-img" style="background-image: url('https://picsum.photos/id/1011/300/180');"></div>
-      <div class="category-card-content">
-        <div class="category-card-title">Buffets</div>
-        <div class="category-card-meta">15+ Offers | Karachi</div>
-        <div class="category-card-tag">Trending</div>
-      </div>
-    </div>
+            <div class="deals-grid">
+                <div class="deal-card">
+                    <div class="deal-image" style="background-image: url('https://picsum.photos/300/180');"></div>
+                    <div class="deal-content">
+                        <div class="deal-title">Sakura Buffet</div>
+                        <div class="deal-meta">Rs. 899 | Karachi</div>
+                        <div class="deal-tag">50% OFF</div>
+                    </div>
+                </div>
 
-    <div class="category-card">
-      <div class="category-card-img" style="background-image: url('https://picsum.photos/id/1025/300/180');"></div>
-      <div class="category-card-content">
-        <div class="category-card-title">Fast Food</div>
-        <div class="category-card-meta">20+ Deals | Lahore</div>
-        <div class="category-card-tag">New</div>
-      </div>
-    </div>
+                <div class="deal-card">
+                    <div class="deal-image" style="background-image: url('https://picsum.photos/300/180');"></div>
+                    <div class="deal-content">
+                        <div class="deal-title">BBQ Tonight</div>
+                        <div class="deal-meta">Rs. 1200 | Lahore</div>
+                        <div class="deal-tag">Special Deal</div>
+                    </div>
+                </div>
 
-    <div class="category-card">
-      <div class="category-card-img" style="background-image: url('https://picsum.photos/id/1035/300/180');"></div>
-      <div class="category-card-content">
-        <div class="category-card-title">Chinese</div>
-        <div class="category-card-meta">8 Restaurants | Islamabad</div>
-        <div class="category-card-tag">Popular</div>
-      </div>
-    </div>
+                <div class="deal-card">
+                    <div class="deal-image" style="background-image: url('https://picsum.photos/300/180');"></div>
+                    <div class="deal-content">
+                        <div class="deal-title">Chop Chop Wok</div>
+                        <div class="deal-meta">Rs. 750 | Islamabad</div>
+                        <div class="deal-tag">New</div>
+                    </div>
+                </div>
 
-    <div class="category-card">
-      <div class="category-card-img" style="background-image: url('https://picsum.photos/id/1042/300/180');"></div>
-      <div class="category-card-content">
-        <div class="category-card-title">Pizza</div>
-        <div class="category-card-meta">25+ Places | Karachi</div>
-        <div class="category-card-tag">Flat 50%</div>
-      </div>
-    </div>
-  </div>
-</section>
+                <div class="deal-card">
+                    <div class="deal-image" style="background-image: url('https://picsum.photos/300/180');"></div>
+                    <div class="deal-content">
+                        <div class="deal-title">Salt’n Pepper</div>
+                        <div class="deal-meta">Rs. 1100 | Multan</div>
+                        <div class="deal-tag">Flat Deal</div>
+                    </div>
+                </div>
 
+                <div class="deal-card">
+                    <div class="deal-image" style="background-image: url('https://picsum.photos/300/180');"></div>
+                    <div class="deal-content">
+                        <div class="deal-title">Kolachi</div>
+                        <div class="deal-meta">Rs. 1400 | Karachi</div>
+                        <div class="deal-tag">30% OFF</div>
+                    </div>
+                </div>
+
+                <div class="deal-card">
+                    <div class="deal-image" style="background-image: url('https://picsum.photos/300/180');"></div>
+                    <div class="deal-content">
+                        <div class="deal-title">La Chine</div>
+                        <div class="deal-meta">Rs. 950 | Faisalabad</div>
+                        <div class="deal-tag">Buffet</div>
+                    </div>
+                </div>
+            </div>
+
+            <button class="view-all-btn">View All Deals</button>
+        </section>
     </section>
 
     <!-- ABOUT SECTION -->
@@ -245,27 +239,8 @@
     </section>
 
     <?php include 'includes/footer.php'; ?>
-    <!-- Swiper JS -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
-    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
-
-    <script>
-        const swiper = new Swiper('#deals-carousel', {
-            slidesPerView: 1,
-            spaceBetween: 40,
-            loop: true,
-            pagination: {
-                el: '#deals-carousel .swiper-pagination',
-                clickable: true,
-            },
-            navigation: {
-                nextEl: '#deals-carousel .swiper-button-next',
-                prevEl: '#deals-carousel .swiper-button-prev',
-            },
-        });
-    </script>
-
-
+<!-- Swiper JS -->
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 
 </body>
 
