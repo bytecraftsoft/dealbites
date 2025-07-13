@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="utf-8">
     <title>DarkPan - Deal Categories</title>
@@ -99,27 +100,28 @@
             border-radius: 12px;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
         }
+
         .pagination .page-link {
-    background-color: #1a1a1a;
-    color: #e0e0e0;
-    border: 1px solid #444;
-    margin: 0 3px;
-    transition: 0.2s;
-}
+            background-color: #1a1a1a;
+            color: #e0e0e0;
+            border: 1px solid #444;
+            margin: 0 3px;
+            transition: 0.2s;
+        }
 
-.pagination .page-link:hover {
-    background-color: #333;
-    color: #ffffff;
-}
+        .pagination .page-link:hover {
+            background-color: #333;
+            color: #ffffff;
+        }
 
-.pagination .page-item.active .page-link {
-    background-color: #333 !important;
-    color: #ffffff !important;
-    border: 1px solid #555 !important;
-}
-
+        .pagination .page-item.active .page-link {
+            background-color: #333 !important;
+            color: #ffffff !important;
+            border: 1px solid #555 !important;
+        }
     </style>
 </head>
+
 <body>
     <div class="container-fluid position-relative d-flex p-0">
         <!-- Sidebar -->
@@ -127,6 +129,8 @@
 
         <!-- Main Content -->
         <div class="content">
+            <?php include 'navbar.php'; ?>
+
             <div class="container-fluid pt-4 px-4">
                 <div class="row g-4">
                     <div class="col-12">
@@ -141,74 +145,73 @@
                                             <th>Description</th>
                                             <th>Slug</th>
                                             <th>Created At</th>
+                                            <th>Actions</th>
                                         </tr>
                                     </thead>
-                                  <?php
-include '../config/config.php';
+                                    <tbody>
+                                        <?php
+                                        include '../config/config.php';
 
-$limit = 15; // Records per page
+                                        $limit = 15;
+                                        $page = isset($_GET['page']) ? (int) $_GET['page'] : 1;
+                                        if ($page <= 0) $page = 1;
+                                        $offset = ($page - 1) * $limit;
 
-// Current page number from URL (default = 1)
-$page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
-if ($page <= 0) $page = 1;
+                                        $query = "SELECT * FROM deal_categories LIMIT $offset, $limit";
+                                        $result = mysqli_query($conn, $query);
 
-// Calculate offset
-$offset = ($page - 1) * $limit;
+                                        $countQuery = "SELECT COUNT(*) AS total FROM deal_categories";
+                                        $countResult = mysqli_query($conn, $countQuery);
+                                        $totalRows = mysqli_fetch_assoc($countResult)['total'];
+                                        $totalPages = ceil($totalRows / $limit);
 
-// Fetch limited records
-$query = "SELECT * FROM deal_categories LIMIT $offset, $limit";
-$result = mysqli_query($conn, $query);
-
-// Fetch total records for pagination count
-$countQuery = "SELECT COUNT(*) AS total FROM deal_categories";
-$countResult = mysqli_query($conn, $countQuery);
-$totalRows = mysqli_fetch_assoc($countResult)['total'];
-$totalPages = ceil($totalRows / $limit);
-
-// Display table rows
-while ($row = mysqli_fetch_assoc($result)) {
-    echo "<tr>";
-    echo "<td>{$row['id']}</td>";
-    echo "<td>{$row['name']}</td>";
-    echo "<td>{$row['description']}</td>";
-    echo "<td>{$row['slug']}</td>";
-    echo "<td>{$row['created_at']}</td>";
-    echo "</tr>";
-}
-?>
-
+                                        while ($row = mysqli_fetch_assoc($result)) {
+                                            echo "<tr>";
+                                            echo "<td>{$row['id']}</td>";
+                                            echo "<td>{$row['name']}</td>";
+                                            echo "<td>{$row['description']}</td>";
+                                            echo "<td>{$row['slug']}</td>";
+                                            echo "<td>{$row['created_at']}</td>";
+                                            echo "<td>
+                                                    <a href='edit_deal_category.php?id={$row['id']}' class='btn btn-sm btn-warning'>Edit</a>
+                                                    <a href='delete_deal_category.php?id={$row['id']}' class='btn btn-sm btn-danger' onclick=\"return confirm('Are you sure to delete?')\">Delete</a>
+                                                  </td>";
+                                            echo "</tr>";
+                                        }
+                                        ?>
+                                    </tbody>
                                 </table>
                                 <?php if ($totalPages > 1): ?>
-<nav aria-label="Page navigation" class="mt-4">
-    <ul class="pagination justify-content-center">
-        <?php if ($page > 1): ?>
-            <li class="page-item">
-                <a class="page-link bg-dark text-light border-secondary" href="?page=<?php echo $page - 1; ?>">« Prev</a>
-            </li>
-        <?php endif; ?>
+                                    <nav aria-label="Page navigation" class="mt-4">
+                                        <ul class="pagination justify-content-center">
+                                            <?php if ($page > 1): ?>
+                                                <li class="page-item">
+                                                    <a class="page-link bg-dark text-light border-secondary" href="?page=<?php echo $page - 1; ?>">« Prev</a>
+                                                </li>
+                                            <?php endif; ?>
 
-        <?php for ($i = 1; $i <= $totalPages; $i++): ?>
-            <li class="page-item <?php if ($page == $i) echo 'active'; ?>">
-                <a class="page-link bg-dark text-light border-secondary <?php if ($page == $i) echo 'fw-bold'; ?>" href="?page=<?php echo $i; ?>"><?php echo $i; ?></a>
-            </li>
-        <?php endfor; ?>
+                                            <?php for ($i = 1; $i <= $totalPages; $i++): ?>
+                                                <li class="page-item <?php if ($page == $i) echo 'active'; ?>">
+                                                    <a class="page-link bg-dark text-light border-secondary <?php if ($page == $i) echo 'fw-bold'; ?>" href="?page=<?php echo $i; ?>"><?php echo $i; ?></a>
+                                                </li>
+                                            <?php endfor; ?>
 
-        <?php if ($page < $totalPages): ?>
-            <li class="page-item">
-                <a class="page-link bg-dark text-light border-secondary" href="?page=<?php echo $page + 1; ?>">Next »</a>
-            </li>
-        <?php endif; ?>
-    </ul>
-</nav>
-<?php endif; ?>
+                                            <?php if ($page < $totalPages): ?>
+                                                <li class="page-item">
+                                                    <a class="page-link bg-dark text-light border-secondary" href="?page=<?php echo $page + 1; ?>">Next »</a>
+                                                </li>
+                                            <?php endif; ?>
+                                        </ul>
+                                    </nav>
+                                <?php endif; ?>
 
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+            <?php include 'footer.php'; ?>
         </div>
-        <!-- End Content -->
     </div>
 
     <!-- JS Libraries -->

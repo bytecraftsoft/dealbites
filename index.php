@@ -55,61 +55,63 @@
         <section class="trending-section">
             <h2>Trending Deals</h2>
 
-            <div id="deals-carousel" class="swiper-container">
+            <div class="swiper deals-swiper">
                 <div class="swiper-wrapper">
                     <?php
                     include 'config/config.php';
-                    $sql = "SELECT * FROM deals ORDER BY created_at DESC";
+
+                    $sql = "SELECT * FROM deals WHERE is_popular = 1 ORDER BY created_at DESC";
                     $result = $conn->query($sql);
-                    $counter = 0;
+
                     $chunkSize = 12;
-                    $cards = array();
+                    $cards = [];
 
                     while ($row = $result->fetch_assoc()) {
                         $cards[] = $row;
                     }
 
-                    $total = count($cards);
                     $chunks = array_chunk($cards, $chunkSize);
 
                     foreach ($chunks as $slide): ?>
                         <div class="swiper-slide">
                             <div class="deals-grid">
                                 <?php foreach ($slide as $row): ?>
-                                    <div class="deal-card">
-                                        <div class="deal-image"
-                                            style="background-image: url('<?php echo $row['image'] ?: 'images/default.jpg'; ?>');">
-                                        </div>
+                                    <a href="deal-details.php?id=<?= $row['id']; ?>" class="deal-card-link">
+                                        <?php
+                                        $imagePath = !empty($row['image']) ? 'assets/images/' . $row['image'] : 'assets/images/default.jpg';
+                                        ?>
+                                        <div class="deal-image" style="background-image: url('<?= $imagePath ?>');"></div>
+
+
                                         <div class="deal-content">
-                                            <div class="deal-title"><?php echo $row['title'] ?: 'Untitled Deal'; ?></div>
+                                            <div class="deal-title"><?= $row['title'] ?: 'Untitled Deal'; ?></div>
                                             <div class="deal-meta">
-                                                <?php
-                                                echo $row['price'] > 0 ? "Rs. " . number_format($row['price']) : "Price N/A";
-                                                echo $row['city'] ? " | " . $row['city'] : "";
-                                                ?>
+                                                <?= ($row['price'] > 0) ? "Rs. " . number_format($row['price']) : "Price N/A"; ?>
+                                                <?= $row['city'] ? " | " . $row['city'] : ""; ?>
                                             </div>
                                             <?php if (!empty($row['tag'])): ?>
-                                                <div class="deal-tag"><?php echo $row['tag']; ?></div>
+                                                <div class="deal-tag"><?= $row['tag']; ?></div>
                                             <?php endif; ?>
                                         </div>
-                                    </div>
+                                    </a>
                                 <?php endforeach; ?>
                             </div>
                         </div>
                     <?php endforeach; ?>
                 </div>
-                <!-- Swiper Pagination -->
+
+                <!-- Navigation + Pagination -->
+                <div class="swiper-pagination"></div>
                 <div class="swiper-button-prev"></div>
                 <div class="swiper-button-next"></div>
-                <div class="swiper-pagination"></div>
-
             </div>
         </section>
 
+
         <!-- FILTER SECTION -->
-         
+
         <section class="filter-modern-section">
-<h2 class="section-heading" style="text-align: center;">Explore by Category</h2>
+            <h2 class="section-heading" style="text-align: center;">Explore by Category</h2>
 
             <div class="filter-box">
 
@@ -117,11 +119,16 @@
                 <div class="custom-dropdown" data-label="Category">
                     <div class="selected"> Select Category</div>
                     <div class="options">
-                        <div class="option">Buffet</div>
-                        <div class="option">Ramzan</div>
-                        <div class="option">Fast Food</div>
-                        <div class="option">Desi</div>
-                        <div class="option">Chinese</div>
+                        <div class="option">All</div>
+
+                      <?php
+include 'config/config.php'; // Make sure correct path
+$catQuery = mysqli_query($conn, "SELECT name FROM deal_categories ORDER BY name ASC");
+while ($cat = mysqli_fetch_assoc($catQuery)) {
+    echo "<div class='option'>{$cat['name']}</div>";
+}
+?>
+
                     </div>
                 </div>
 
@@ -129,6 +136,8 @@
                 <div class="custom-dropdown" data-label="City">
                     <div class="selected"> Select City</div>
                     <div class="options">
+                        <div class="option">All</div>
+
                         <div class="option">Karachi</div>
                         <div class="option">Lahore</div>
                         <div class="option">Islamabad</div>
@@ -141,6 +150,8 @@
                 <div class="custom-dropdown" data-label="Price">
                     <div class="selected"> Select Price</div>
                     <div class="options">
+                        <div class="option">All</div>
+
                         <div class="option">Under Rs. 1000</div>
                         <div class="option">Rs. 1000 – 2000</div>
                         <div class="option">Above Rs. 2000</div>
@@ -152,6 +163,8 @@
                 <div class="custom-dropdown" data-label="Sort">
                     <div class="selected">Sort by</div>
                     <div class="options">
+                        <div class="option">All</div>
+
                         <div class="option">Latest</div>
                         <div class="option">Popular</div>
                         <div class="option">Low to High</div>
@@ -162,47 +175,12 @@
             </div>
         </section>
 
-      <!-- EXPLORE BY CATEGORY SECTION -->
-<section class="category-card-section">
-
-  <div class="category-card-grid">
-    <div class="category-card">
-      <div class="category-card-img" style="background-image: url('https://picsum.photos/id/1011/300/180');"></div>
-      <div class="category-card-content">
-        <div class="category-card-title">Buffets</div>
-        <div class="category-card-meta">15+ Offers | Karachi</div>
-        <div class="category-card-tag">Trending</div>
-      </div>
-    </div>
-
-    <div class="category-card">
-      <div class="category-card-img" style="background-image: url('https://picsum.photos/id/1025/300/180');"></div>
-      <div class="category-card-content">
-        <div class="category-card-title">Fast Food</div>
-        <div class="category-card-meta">20+ Deals | Lahore</div>
-        <div class="category-card-tag">New</div>
-      </div>
-    </div>
-
-    <div class="category-card">
-      <div class="category-card-img" style="background-image: url('https://picsum.photos/id/1035/300/180');"></div>
-      <div class="category-card-content">
-        <div class="category-card-title">Chinese</div>
-        <div class="category-card-meta">8 Restaurants | Islamabad</div>
-        <div class="category-card-tag">Popular</div>
-      </div>
-    </div>
-
-    <div class="category-card">
-      <div class="category-card-img" style="background-image: url('https://picsum.photos/id/1042/300/180');"></div>
-      <div class="category-card-content">
-        <div class="category-card-title">Pizza</div>
-        <div class="category-card-meta">25+ Places | Karachi</div>
-        <div class="category-card-tag">Flat 50%</div>
-      </div>
-    </div>
-  </div>
-</section>
+        <!-- EXPLORE BY CATEGORY SECTION -->
+        <section class="category-card-section">
+            <div class="category-card-grid">
+                <!-- AJAX loaded cards go here -->
+            </div>
+        </section>
 
     </section>
 
@@ -249,24 +227,73 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 
-    <script>
-        const swiper = new Swiper('#deals-carousel', {
-            slidesPerView: 1,
-            spaceBetween: 40,
-            loop: true,
-            pagination: {
-                el: '#deals-carousel .swiper-pagination',
-                clickable: true,
-            },
-            navigation: {
-                nextEl: '#deals-carousel .swiper-button-next',
-                prevEl: '#deals-carousel .swiper-button-prev',
-            },
-        });
-    </script>
 
 
 
 </body>
 
 </html>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const swiper = new Swiper('.deals-swiper', {
+            slidesPerView: 1,
+            spaceBetween: 30,
+            loop: true,
+            pagination: {
+                el: '.deals-swiper .swiper-pagination',
+                clickable: true,
+            },
+            navigation: {
+                nextEl: '.deals-swiper .swiper-button-next',
+                prevEl: '.deals-swiper .swiper-button-prev',
+            },
+        });
+    });
+</script>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    function fetchDeals(page = 1) {
+        const category = $('.custom-dropdown[data-label="Category"] .selected').text().trim();
+        const city = $('.custom-dropdown[data-label="City"] .selected').text().trim();
+        const price = $('.custom-dropdown[data-label="Price"] .selected').text().trim();
+        const sort = $('.custom-dropdown[data-label="Sort"] .selected').text().trim();
+
+        $.ajax({
+            url: 'fetch_deals.php',
+            method: 'GET',
+            data: {
+                category: (category !== 'Select Category' && category !== 'All') ? category : '',
+                city: (city !== 'Select City' && city !== 'All') ? city : '',
+                price: (price !== 'Select Price' && price !== 'All') ? price : '',
+                sort: (sort !== 'Sort by' && sort !== 'All') ? sort : '',
+                page: page
+            },
+
+            beforeSend: function () {
+                $('.category-card-grid').html('<div style="color: white; text-align:center; padding: 2rem;">Loading...</div>');
+            },
+            success: function (response) {
+                $('.category-card-grid').html(response);
+            }
+        });
+    }
+
+    // Trigger fetch on dropdown option click
+    $('.custom-dropdown .option').on('click', function () {
+        $(this).closest('.custom-dropdown').find('.selected').text($(this).text());
+        fetchDeals();
+    });
+
+    // Trigger fetch on pagination link click
+    $(document).on('click', '.page-link', function (e) {
+        e.preventDefault();
+        const page = $(this).data('page');
+        fetchDeals(page);
+    });
+
+    // Initial Load
+    $(document).ready(function () {
+        fetchDeals();
+    });
+</script>
