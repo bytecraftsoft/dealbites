@@ -1,0 +1,133 @@
+# DealBites - Git Ignore Configuration
+
+# Environment and Configuration Files
+config/config.php
+.env
+.env.local
+.env.production
+
+# Database Files
+*.sql
+*.sqlite
+*.db
+backup/
+
+# Log Files
+*.log
+logs/
+error_log
+access_log
+
+# Temporary Files
+*.tmp
+*.temp
+*.cache
+cache/
+tmp/
+
+# Image Uploads (consider if you want to track these)
+assets/images/uploads/
+uploads/
+
+# IDE and Editor Files
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+.DS_Store
+Thumbs.db
+
+# PHP Specific
+vendor/
+composer.lock
+
+# Node.js (if using for build tools)
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Build and Distribution
+dist/
+build/
+
+# System Files
+.htaccess.backup
+.htpasswd
+
+# Backup Files
+*.bak
+*.backup
+*.orig
+
+# Archive Files
+*.zip
+*.tar.gz
+*.rar
+
+# Runtime Data
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# Coverage Directory
+coverage/
+
+# Documentation Build
+docs/_build/
+
+# Local Development
+local/
+dev/
+
+# Session Files
+sessions/
+
+# Email Test Files
+mail_test/
+
+# Sensitive Information
+passwords.txt
+secrets.txt
+api_keys.txt
+
+# OS Generated Files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# PHP Storm
+.idea/
+
+# Sublime Text
+*.sublime-project
+*.sublime-workspace
+
+# Visual Studio Code
+.vscode/
+
+# Vim
+*.swp
+*.swo
+*~
+
+# Emacs
+*~
+\#*\#
+/.emacs.desktop
+/.emacs.desktop.lock
+*.elc
+auto-save-list
+tramp
+.\#*
+
+# Test Files
+test/
+tests/
+phpunit.xml
+.phpunit.result.cache 

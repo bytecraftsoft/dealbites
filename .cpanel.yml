@@ -1,0 +1,45 @@
+---
+deployment:
+  tasks:
+    # Deploy all files to public_html directory
+    - export DEPLOYPATH=/home/$USER/public_html/
+    
+    # Copy all project files except Git files and development files
+    - /bin/cp -R * $DEPLOYPATH
+    
+    # Copy hidden files like .htaccess if they exist
+    - /bin/cp -R .[^.]* $DEPLOYPATH 2>/dev/null || true
+    
+    # Set proper permissions for directories
+    - find $DEPLOYPATH -type d -exec chmod 755 {} \;
+    
+    # Set proper permissions for files
+    - find $DEPLOYPATH -type f -exec chmod 644 {} \;
+    
+    # Make specific files executable if needed
+    - chmod 755 $DEPLOYPATH/dashboard/*.php 2>/dev/null || true
+    
+    # Create assets directories if they don't exist
+    - mkdir -p $DEPLOYPATH/assets/images
+    - mkdir -p $DEPLOYPATH/assets/css
+    - mkdir -p $DEPLOYPATH/assets/js
+    
+    # Set proper permissions for upload directories
+    - chmod 755 $DEPLOYPATH/assets/images
+    
+    # Clean up deployment artifacts
+    - rm -f $DEPLOYPATH/.cpanel.yml
+    - rm -rf $DEPLOYPATH/.git*
+    - rm -f $DEPLOYPATH/README.md 2>/dev/null || true
+    
+    # Create necessary directories for application
+    - mkdir -p $DEPLOYPATH/config
+    - mkdir -p $DEPLOYPATH/includes
+    - mkdir -p $DEPLOYPATH/dashboard
+    - mkdir -p $DEPLOYPATH/fetch
+    
+    # Ensure config file exists with proper permissions
+    - chmod 644 $DEPLOYPATH/config/config.php 2>/dev/null || true
+    
+    # Set security for sensitive files
+    - chmod 600 $DEPLOYPATH/config/config.php 2>/dev/null || true 
