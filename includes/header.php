@@ -16,7 +16,6 @@
       </div>
       <a href="#search">Search</a>
       <a href="contact.php">Contact</a>
-<a href="adminlogin.php" title="Login">
   <i class="fas fa-user"></i>
 </a>
 

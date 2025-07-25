@@ -20,8 +20,8 @@
     <link rel="stylesheet" href="assets/css/style.css" />
 
     <!-- Google Ads Script -->
-    <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6586533842821998"
-    crossorigin="anonymous"></script> -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6586533842821998"
+    crossorigin="anonymous"></script>
 
     <!-- Custom Script -->
     <script src="assets/js/script.js"></script>
